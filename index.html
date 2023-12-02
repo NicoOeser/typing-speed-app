@@ -10,7 +10,29 @@
 </head>
 
 <body>
-
+    <div class="container">
+        <div class="stats">
+            <p>Time: <span id="timer"></span></p>
+            <p>Mistakes: <span id="mistakes"></span></p>
+        </div>
+        <div id="quote" onmousedown="return false" onselectstart="return false"></div>
+        <textarea id="quote-input" rows="3"
+            placeholder="Type the text as quickly as you can when the test starts"></textarea>
+        <div class="button-container">
+            <button id="start-test" onclick="startTest()">Start Test</button>
+            <button id="stop-test" onclick="displayResult()">Stop Test</button>
+            <button id="new-test" onclick="newTest()">New Test</button>
+        </div>
+        <div class="result">
+            <div class="result">
+                <h3>Result:</h3>
+                <div class="wrapper">
+                    <p>Accuracy: <span id="accuracy"></span></p>
+                    <p>Speed: <span id="wpm"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
