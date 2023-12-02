@@ -4,6 +4,8 @@ const quoteSection = document.getElementById("quote");
 const userInput = document.getElementById("quote-input");
 const newTestButton = document.getElementById("new-test");
 
+userInput.addEventListener("input", handleInput);
+
 let quote = "";
 let time = 60;
 let timer = "";
@@ -21,38 +23,64 @@ const renderNewQuote = async () => {
 };
 
 
-userInput.addEventListener("input", () => {
-    let quoteChars = document.querySelectorAll(".quote-chars");
-    quoteChars = Array.from(quoteChars);
+function handleInput() {
+    let quoteChars = Array.from(document.querySelectorAll(".quote-chars"));
     let userInputChars = userInput.value.split("");
-    quoteChars.forEach((char, index) => {
-        if (char.innerText == userInputChars[index]) {
-            char.classList.add("success");
-        }
-        else if (userInputChars[index] == null) {
-            if (char.classList.contains("success")) {
-                char.classList.remove("success");
-            } else {
-                char.classList.remove("fail");
-            }
-        }
-        else {
-            if (!char.classList.contains("fail")) {
 
-                mistakes++;
-                char.classList.add("fail");
-            }
-            document.getElementById("mistakes").innerText = mistakes;
-        }
-        let check = quoteChars.every((element) => {
-            return element.classList.contains("success");
-        });
-        if (check) {
-            displayResult();
-        }
+    quoteChars.forEach((char, index) => {
+        handleCharacter(char, userInputChars[index]);
+        updateMistakes(char);
     });
 
-});
+    checkSuccess(quoteChars);
+}
+
+
+function handleCharacter(char, userInputChar) {
+    if (char.innerText === userInputChar) {
+        char.classList.add("success");
+    } else if (userInputChar == null) {
+        removeClasses(char, ["success", "fail"]);
+    } else {
+        handleMistake(char);
+    }
+}
+
+
+function removeClasses(element, classes) {
+    classes.forEach((className) => {
+        if (element.classList.contains(className)) {
+            element.classList.remove(className);
+        }
+    });
+}
+
+
+function handleMistake(char) {
+    if (!char.classList.contains("fail")) {
+        mistakes++;
+        char.classList.add("fail");
+        document.getElementById("mistakes").innerText = mistakes;
+    }
+}
+
+
+function updateMistakes(char) {
+    if (char.innerText === "X") {
+        mistakes += 2;
+        document.getElementById("mistakes").innerText = mistakes;
+    }
+}
+
+
+function checkSuccess(quoteChars) {
+    let check = quoteChars.every((element) => {
+        return element.classList.contains("success");
+    });
+    if (check) {
+        displayResult();
+    }
+}
 
 
 function updateTimer() {
@@ -84,9 +112,11 @@ const displayResult = () => {
     newTestButton.style.display = "block";
 };
 
+
 const newTest = () => {
     location.reload();
 };
+
 
 const startTest = () => {
     mistakes = 0;
